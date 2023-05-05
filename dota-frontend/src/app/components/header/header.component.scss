@@ -5,9 +5,19 @@
     width: 100%;
     height: 100%;
     padding: 0 20px;
+    
   }
   
   .logo {
     max-height: 10em; /* Adjust as needed */
     max-width: 30em; /* Adjust as needed */
   }
+
+  .main-header h1 {
+    background: linear-gradient(to right, #64c5f6, #6071d1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
