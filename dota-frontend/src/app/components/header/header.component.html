@@ -1,4 +1,13 @@
 <div class="main-header">
-    <img src="../../../assets//logo/logo-transparent.png" alt="logo" class="logo" />
-    <h1>RayVision</h1>
+    <div>
+        <img src="../../../assets//logo/logo-transparent.png" alt="logo" class="logo" />
+        <h1>RayVision</h1>
+    </div>
+    <div>
+        <mat-form-field class="search-form-field">
+            <mat-label> Search player </mat-label>
+            <input matInput type="text" [(ngModel)]="value">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
 </div>
