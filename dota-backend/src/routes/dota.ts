@@ -1,7 +1,10 @@
 import { Router } from "express";
+import { DotaHandler } from "../handlers/dota";
 
 const DotaRouter = Router();
 
-DotaRouter.get('/:id', DotaHandler.show);
+const dotaHandler = new DotaHandler();
+
+DotaRouter.get('/:id', dotaHandler.show);
 
 export default DotaRouter;
