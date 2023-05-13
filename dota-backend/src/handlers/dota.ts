@@ -7,11 +7,7 @@ export class DotaHandler {
     
     async show(req: Request, res: Response) {
         try{
-            dota.connect();
-            dota.dotaConnect();
-            const data = dota.getPlayerProfile(req.params.id);
-            dota.dotaDisconnect();
-            dota.disconnect();
+            const data = await dota.get_live_matches();
             res.status(200).json({message: `${data}`});
         }
         catch (error) {
