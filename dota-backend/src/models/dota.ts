@@ -87,6 +87,7 @@ export default class Dota {
                 }
                 else {
                     console.log(data);
+                    return(data);
                 }
             });
         }
