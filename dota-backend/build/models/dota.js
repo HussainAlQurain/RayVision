@@ -1,25 +1,22 @@
-import dotenv from 'dotenv';
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
 const Steam = require('steam');
 const Dota2 = require('dota2');
-
-dotenv.config();
-
-export default class Dota {
-    private steamClient;
-    private steamUser;
-    private dotaClient;
-
-
+dotenv_1.default.config();
+class Dota {
     constructor() {
         this.steamClient = new Steam.SteamClient();
         this.steamUser = new Steam.SteamUser(this.steamClient);
         this.dotaClient = new Dota2.Dota2Client(this.steamClient, true);
     }
     //connect to steam client
-    public connect() {
-        try{
-            if(!this.steamClient.loggedOn) {
+    connect() {
+        try {
+            if (!this.steamClient.loggedOn) {
                 this.steamClient.connect();
                 this.steamClient.on('connected', () => {
                     this.steamUser.logOn({
@@ -31,29 +28,29 @@ export default class Dota {
             else {
                 console.log('Already logged in');
             }
-        } catch (error) {
+        }
+        catch (error) {
             return error;
         }
     }
-
     //disconnect from steam client
-    public disconnect() {
-        try{
-            if(this.steamClient.loggedOn){
+    disconnect() {
+        try {
+            if (this.steamClient.loggedOn) {
                 this.steamClient.disconnect();
             }
-            else{
+            else {
                 console.log('Already logged out');
             }
         }
-        catch(error) {
+        catch (error) {
             return error;
         }
     }
     //connect to dota client
-    public dotaConnect() {
-        try{
-            if(this.steamClient.loggedOn) {
+    dotaConnect() {
+        try {
+            if (this.steamClient.loggedOn) {
                 this.dotaClient.launch();
                 this.dotaClient.on('ready', () => {
                     console.log('Dota2 ready');
@@ -63,37 +60,35 @@ export default class Dota {
                 console.log('Not logged in to steam client');
             }
         }
-        catch(error) {
+        catch (error) {
             return error;
         }
     }
-        
     //disconnect from dota client
-    public dotaDisconnect() {
-        try{
+    dotaDisconnect() {
+        try {
             this.dotaClient.exit();
         }
-        catch(error) {
+        catch (error) {
             return error;
-        }       
+        }
     }
-
     //request player profile data
-    public getPlayerProfile(steamId: string) {
-        try{
-            this.dotaClient.requestProfileCard(steamId, (err: any, data: any) => {
-                if(err) {
+    getPlayerProfile(steamId) {
+        try {
+            this.dotaClient.requestProfileCard(steamId, (err, data) => {
+                if (err) {
                     console.log(err);
                 }
                 else {
                     console.log(data);
-                    return(data);
+                    return (data);
                 }
             });
         }
-        catch(error) {
+        catch (error) {
             return error;
         }
     }
-    
 }
+exports.default = Dota;
