@@ -15,7 +15,8 @@ export default class Dota {
     async get_live_matches() {
         try{
             const response = await axios.get(`${this.baseUrl}/live`);
-            return response.data;
+            const responseData = response.data.map((obj: any) => JSON.stringify(obj));
+            return responseData;
         }
         catch(error){
             console.log(error);
