@@ -16,4 +16,15 @@ export class DotaHandler {
         }
     }
 
+    //get all players in a live match using one player's ID
+    async show_players(req: Request, res: Response) {
+        try{
+            const data = await dota.get_players(parseInt(req.params.account_id));
+            res.status(200).json({body: `${JSON.stringify(data)}`});
+        }
+        catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
 }
