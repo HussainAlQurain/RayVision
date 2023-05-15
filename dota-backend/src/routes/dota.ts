@@ -5,6 +5,6 @@ const DotaRouter = Router();
 
 const dotaHandler = new DotaHandler();
 
-DotaRouter.get('/:id', dotaHandler.show);
+DotaRouter.get('/live', dotaHandler.show);
 
 export default DotaRouter;
