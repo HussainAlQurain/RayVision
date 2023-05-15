@@ -13,7 +13,7 @@ export default class Dota {
     
     }
 
-    //get live matches
+    //Method to get all live matches using OpenDota API
     async get_live_matches(): Promise<LiveMatch[]> {
         try{
             const response = await axios.get(`${this.baseUrl}/live`);
