@@ -32,6 +32,7 @@ export default class Dota {
             //get all live matches
             const matches: LiveMatch[] = await this.get_live_matches();
             //find the match that contains the player with the given ID
+            //use find method to return the first match that contains the player with the given ID
             const match = matches.find(match => match.players.find(player => player.account_id === account_id && match.deactivate_time === 0));
             //if match is found, return all players in that match
             if(match){
