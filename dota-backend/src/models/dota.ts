@@ -14,11 +14,11 @@ export default class Dota {
     }
 
     //get live matches
-    async get_live_matches(): Promise<LiveMatch[] | Error> {
+    async get_live_matches(): Promise<LiveMatch[]> {
         try{
             const response = await axios.get(`${this.baseUrl}/live`);
-            const responseData = response.data;
-            return <LiveMatch[]>responseData
+            const responseData: LiveMatch[] = response.data;
+            return responseData
         }
         catch(error){
             console.log(error);
