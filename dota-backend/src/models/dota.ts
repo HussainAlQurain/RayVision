@@ -7,7 +7,7 @@ dotenv.config();
 
 export default class Dota {
     private baseUrl: string = process.env.DOTA_API_URL || '';
-    private steamUrl: string = process.env.STEAM_API_URL || '';
+    private steamUrl: string = process.env.DOTA_STEAM_URL || '';
 
 
     constructor() {

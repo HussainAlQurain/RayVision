@@ -8,14 +8,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-<<<<<<< HEAD
-=======
-import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule} from '@angular/material/icon';
->>>>>>> bug-free
 
 @NgModule({
   declarations: [
@@ -29,10 +25,6 @@ import { MatIconModule} from '@angular/material/icon';
     MatToolbarModule,
     NbThemeModule.forRoot({ name: 'dark' }),
     NbLayoutModule,
-<<<<<<< HEAD
-    NbEvaIconsModule
-    
-=======
     NbEvaIconsModule,
     FormsModule,
     MatFormFieldModule,
@@ -42,7 +34,6 @@ import { MatIconModule} from '@angular/material/icon';
   ],
   providers: [
   
->>>>>>> bug-free
   ],
   bootstrap: [AppComponent]
 })

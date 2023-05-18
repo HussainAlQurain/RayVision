@@ -1,37 +1,3 @@
-<<<<<<< HEAD
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-    
-  }
-  
-  .logo {
-    max-height: 10em; /* Adjust as needed */
-    max-width: 30em; /* Adjust as needed */
-  }
-
-  .main-header h1 {
-    background: linear-gradient(to right, #64c5f6, #6071d1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-family: 'Courier New', Courier, monospace;
-  }
-  
-
-  .main-header div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-  }
-=======
 .main-header {
   display: flex;
   align-items: center;
@@ -64,7 +30,7 @@ header {
   min-width: 30em;
   color:#64c5f6;
   font-size: large;
-  
+  margin-top: 1em;
   
 }
 
@@ -78,4 +44,3 @@ header {
   font-weight: 900;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
  }
->>>>>>> bug-free
