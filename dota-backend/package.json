@@ -20,9 +20,9 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "morgan": "^1.10.0",
-    "protobufjs": "^7.2.3",
+    "protobufjs": "^5.0.1",
     "steam": "^1.4.1",
-    "steam-resources": "^1.0.0"
+    "steam-resources": "github:seishun/node-steam-resources"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
