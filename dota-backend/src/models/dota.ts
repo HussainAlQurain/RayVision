@@ -18,9 +18,15 @@ export default class Dota {
     private steam_pass = process.env.STEAM_PASSWORD;
 
     constructor() {
-        this.loginToSteam();
+        this.loginToSteam().then(() => {
+            this.launchDota().then(() => {
+                this.getGames();
+            });
+        });
     }
     
+
+    //login to steam
     async loginToSteam() {
         this.steamClient = new Steam.SteamClient();
         this.steamUser = new Steam.SteamUser(this.steamClient);
@@ -33,24 +39,30 @@ export default class Dota {
         this.steamClient.on('logOnResponse', (logonResp: any) => {
             if (logonResp.eresult === Steam.EResult.OK) {
                 console.log('Logged in!');
-                this.steamUser.gamesPlayed({ games_played: [{ game_id: 570 }] });
             } else {
                 console.log(logonResp);
             }
         });
     }
+    
+    //launch dota
+    async launchDota() {
+        if(this.steamClient && this.steamUser){
+            this.dotaClient = new Dota2.Dota2Client(this.steamClient, true);
+            this.dotaClient.launch();
+            this.dotaClient.on('ready', () => {
+                console.log('Dota 2 ready!');
+            });
+        } else {
+            console.log('Steam client not ready!');
+        }
+    }
+        
 
     async getGames() {
-        this.dotaClient = new Dota2.Dota2Client(this.steamClient, true);
-        this.dotaClient.on('ready', () => {
-            //launch dota
-            this.dotaClient.launch();
-            //get live matches
-            this.dotaClient.on('liveGamesUpdate', (liveGames: any) => {
-                console.log(liveGames);
-                return liveGames;
-            });
-        });
+        setTimeout(() => {
+            console.log('Waiting for 10 seconds...');
+        }, 10000);
     }
 
 }
