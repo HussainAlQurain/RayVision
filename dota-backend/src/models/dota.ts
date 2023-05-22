@@ -12,6 +12,7 @@ export default class Dota {
 
     private steamClient: any;
     private steamUser: any;
+    private dotaClient: any;
 
     private steam_acc = process.env.STEAM_ACCOUNT;
     private steam_pass = process.env.STEAM_PASSWORD;
@@ -40,6 +41,16 @@ export default class Dota {
     }
 
     async getGames() {
-        console.log('getGames');
+        this.dotaClient = new Dota2.Dota2Client(this.steamClient, true);
+        this.dotaClient.on('ready', () => {
+            //launch dota
+            this.dotaClient.launch();
+            //get live matches
+            this.dotaClient.on('liveGamesUpdate', (liveGames: any) => {
+                console.log(liveGames);
+                return liveGames;
+            });
+        });
     }
+
 }
