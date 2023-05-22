@@ -10,54 +10,14 @@ dotenv.config();
 
 export default class Dota {
 
-
-
     constructor() {
     
     }
-
     private steam_acc = process.env.STEAM_ACCOUNT;
     private steam_pass = process.env.STEAM_PASSWORD;
 
     async getGames() {
-        const steamClient = new Steam.SteamClient();
-        const dota2Client = new Dota2.Dota2Client(steamClient);
-
-        //log in to steam
-        steamClient.on('connected', () => {
-            steamClient.logOn({
-                accountName: this.steam_acc,
-                password: this.steam_pass
-            })
-        })
-
-        //log in to dota
-        await new Promise<void>((resolve) => {
-            steamClient.on('logOnResponse', (logonResp: { eresult: any; }) => {
-                if (logonResp.eresult === Steam.ERsult.ok) {
-                    dota2Client.launch();
-                    dota2Client.once('ready', () => {
-                        resolve();
-                    })
-                } else {
-                    console.log('Steam logon failed. Error', logonResp.eresult);
-                }
-            })
-        })
-
-        //get live games
-        const games = await new Promise<any[]>((resolve) => {
-            const callbackSpecificGames = (data: { specific_games: boolean; game_list: any[] }) => {
-              if (data.specific_games) {
-                resolve(data.game_list.filter((game) => game.players && game.players.length > 0));
-              }
-            };
-        
-            dota2Client.on('sourceTVGamesData', callbackSpecificGames);
-            dota2Client.requestSourceTVGames({ start_game: 90 });
-          });
-         
-          return games.filter((game) => game.players && game.players.length > 0);
+        console.log('getGames');
     }
 }
 
