@@ -5,6 +5,7 @@ import { Player } from '../types/Player';
 
 const Steam = require('steam');
 const Dota2 = require('dota2');
+const steam_resources = require("steam-resources");
 
 dotenv.config();
 
@@ -13,56 +14,36 @@ export default class Dota {
     private steamClient: any;
     private steamUser: any;
     private dotaClient: any;
+    private steamFriends: any;
 
-    private steam_acc = process.env.STEAM_ACCOUNT;
-    private steam_pass = process.env.STEAM_PASSWORD;
 
     constructor() {
-        this.loginToSteam().then(() => {
-            this.launchDota().then(() => {
-                this.getGames();
-            });
-        });
-    }
-    
 
-    //login to steam
-    async loginToSteam() {
+    }
+
+    async steam_connect() {
         this.steamClient = new Steam.SteamClient();
         this.steamUser = new Steam.SteamUser(this.steamClient);
+        this.steamFriends = new Steam.SteamFriends(this.steamClient);
+        this.steamClient.connect();
         this.steamClient.on('connected', () => {
             this.steamUser.logOn({
-                account_name: this.steam_acc,
-                password: this.steam_pass
-            });
-        });
-        this.steamClient.on('logOnResponse', (logonResp: any) => {
-            if (logonResp.eresult === Steam.EResult.OK) {
-                console.log('Logged in!');
-            } else {
-                console.log(logonResp);
-            }
-        });
+                account_name: process.env.STEAM_ACCOUNT,
+                password: process.env.STEAM_PASSWORD
+            })
+        })
+        this.steamClient.on('logOnResponse', () => {
+            console.log('steam client connected');
+            this.steamFriends.setPersonaState(Steam.EPersonaState.Online);
+            this.launch_dota();
+        })
+        return this.steamClient
     }
-    
-    //launch dota
-    async launchDota() {
-        if(this.steamClient && this.steamUser){
-            this.dotaClient = new Dota2.Dota2Client(this.steamClient, true);
-            this.dotaClient.launch();
-            this.dotaClient.on('ready', () => {
-                console.log('Dota 2 ready!');
-            });
-        } else {
-            console.log('Steam client not ready!');
-        }
-    }
-        
 
-    async getGames() {
-        setTimeout(() => {
-            console.log('Waiting for 10 seconds...');
-        }, 10000);
+    async launch_dota() {
+        this.dotaClient = new Dota2.Dota2Client(this.steamClient, true, true);
+        this.dotaClient.launch();
     }
+
 
 }

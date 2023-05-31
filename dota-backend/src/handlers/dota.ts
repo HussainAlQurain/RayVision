@@ -8,7 +8,7 @@ export class DotaHandler {
     //get all live matches
     async matches(req: Request, res: Response) {
         try{
-            const data = await dota.getGames();
+            const data = await dota.steam_connect();
             res.status(200).json({body: `${JSON.stringify(data)}`});
         }
         catch (error) {
