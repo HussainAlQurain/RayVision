@@ -16,4 +16,16 @@ export class DotaHandler {
         }
     }
 
+    async search(req: Request, res: Response) {
+        try{
+            const data = await dota.searchLiveGameByAccountId(req.params.id);
+            setTimeout(() => {
+                res.status(200).json({body: `${JSON.stringify(data)}`});    
+            }, 10000);
+            
+        } catch(err) {
+            res.status(500).json(err);
+        }
+    }
+
 }

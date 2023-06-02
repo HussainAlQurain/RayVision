@@ -15,6 +15,7 @@ export default class Dota {
     private steamUser: any;
     private dotaClient: any;
     private steamFriends: any;
+    private steamRichPresence: any;
 
 
     constructor() {
@@ -24,6 +25,7 @@ export default class Dota {
     async steam_connect() {
         this.steamClient = new Steam.SteamClient();
         this.steamUser = new Steam.SteamUser(this.steamClient);
+        this.steamRichPresence = new Steam.SteamRichPresence(this.steamClient, 570);
         this.steamFriends = new Steam.SteamFriends(this.steamClient);
         this.steamClient.connect();
         this.steamClient.on('connected', () => {
@@ -36,6 +38,7 @@ export default class Dota {
             console.log('steam client connected');
             this.steamFriends.setPersonaState(Steam.EPersonaState.Online);
             this.launch_dota();
+            
         })
         return this.steamClient
     }
@@ -43,6 +46,34 @@ export default class Dota {
     async launch_dota() {
         this.dotaClient = new Dota2.Dota2Client(this.steamClient, true, true);
         this.dotaClient.launch();
+    }
+    
+    async searchLiveGameByAccountId(accountId: string) {
+
+        const searchOptions = new Dota2.CMsgDOTARequestMatches({ 
+            search_key: accountId,
+            game_modes: [Dota2.EMatchGroup.MatchGroupNormal],
+            lobby_type: Dota2.ELobbyType.LobbyTypeInvalid,
+            request_id: 1
+        });
+
+        this.dotaClient.Lobby.search(searchOptions, (err: any, response: any) => {
+            if (err) {
+                console.error('Error searching for live game:', err);
+                return;
+            }
+
+            const matches = response.matches as LiveMatch[];
+
+            if (matches.length === 0) {
+                console.log('No live games found for the specified account ID.');
+            } else {
+                console.log('Live games found for the specified account ID:');
+                matches.forEach((match: LiveMatch) => {
+                    console.log('Match ID:', match.match_id);
+                });
+            }
+        });
     }
 
 
