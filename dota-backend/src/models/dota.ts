@@ -49,32 +49,30 @@ export default class Dota {
     }
     
     async searchLiveGameByAccountId(accountId: string) {
-
-        const searchOptions = new Dota2.CMsgDOTARequestMatches({ 
-            search_key: accountId,
-            game_modes: [Dota2.EMatchGroup.MatchGroupNormal],
-            lobby_type: Dota2.ELobbyType.LobbyTypeInvalid,
-            request_id: 1
-        });
-
-        this.dotaClient.Lobby.search(searchOptions, (err: any, response: any) => {
+        return new Promise((resolve, reject) => {
+          const filterOptions = {
+            start_game: 0,
+          };
+      
+          const handleSourceTVGamesResponse = (sourceTVGamesResponse: any) => {
+            console.log(sourceTVGamesResponse);
+            resolve(sourceTVGamesResponse);
+          };
+      
+          this.dotaClient.on('sourceTVGamesData', handleSourceTVGamesResponse);
+      
+          this.dotaClient.requestSourceTVGames(filterOptions, (err: any, response: any) => {
             if (err) {
-                console.error('Error searching for live game:', err);
-                return;
+              console.error(err);
+              reject(err);
+              return;
             }
-
-            const matches = response.matches as LiveMatch[];
-
-            if (matches.length === 0) {
-                console.log('No live games found for the specified account ID.');
-            } else {
-                console.log('Live games found for the specified account ID:');
-                matches.forEach((match: LiveMatch) => {
-                    console.log('Match ID:', match.match_id);
-                });
-            }
+      
+            console.log(response);
+            // You can choose to resolve here if you only want the initial response.
+          });
         });
-    }
+      }
 
 
 }
