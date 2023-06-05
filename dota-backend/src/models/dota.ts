@@ -51,7 +51,7 @@ export default class Dota {
     async searchLiveGameByAccountId(accountId: string) {
         return new Promise((resolve, reject) => {
           const filterOptions = {
-            start_game: 0,
+            start_game: 90,
           };
       
           const handleSourceTVGamesResponse = (sourceTVGamesResponse: any) => {
@@ -72,6 +72,14 @@ export default class Dota {
             // You can choose to resolve here if you only want the initial response.
           });
         });
+      }
+
+      async getMatch(accountId: string) {
+        //search for player
+        const criteria = {
+          account_id: accountId
+        }
+        
       }
 
 
