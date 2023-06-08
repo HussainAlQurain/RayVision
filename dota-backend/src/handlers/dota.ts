@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request, json } from "express";
 import Dota from "../models/dota";
 
 const dota = new Dota();
@@ -20,7 +20,9 @@ export class DotaHandler {
         try{
             const data: any = await dota.searchLiveGameByAccountId(req.params.id);
             const lobbies = data['game_list'].map((match: { lobby_id: any; }) => match.lobby_id);
-            res.status(200).json({body: `${lobbies}`});
+            const matches = data['game_list'].map((match: { match_id: any; }) => match.match_id);
+            const newData = {...data, "matcheslist": matches};
+            res.status(200).json({body: `${matches}`});
             
         } catch(err) {
             res.status(500).json(err);

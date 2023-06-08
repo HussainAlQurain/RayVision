@@ -3,6 +3,7 @@ import axios from 'axios';
 import { LiveMatch } from '../types/LiveMatches';
 import { Player } from '../types/Player';
 
+
 const Steam = require('steam');
 const Dota2 = require('dota2');
 const steam_resources = require("steam-resources");
@@ -51,7 +52,7 @@ export default class Dota {
     async searchLiveGameByAccountId(accountId: string) {
         return new Promise((resolve, reject) => {
           const filterOptions = {
-            start_game: 90,
+            start_game: 0,
           };
       
           const handleSourceTVGamesResponse = (sourceTVGamesResponse: any) => {
@@ -67,9 +68,7 @@ export default class Dota {
               reject(err);
               return;
             }
-      
-            console.log(response);
-            // You can choose to resolve here if you only want the initial response.
+            
           });
         });
       }
