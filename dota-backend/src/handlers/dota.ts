@@ -18,11 +18,8 @@ export class DotaHandler {
 
     async search(req: Request, res: Response) {
         try{
-            const data: any = await dota.searchLiveGameByAccountId(req.params.id);
-            const lobbies = data['game_list'].map((match: { lobby_id: any; }) => match.lobby_id);
-            const matches = data['game_list'].map((match: { match_id: any; }) => match.match_id);
-            const newData = {...data, "matcheslist": matches};
-            res.status(200).json({body: `${matches}`});
+            const data: any = await dota.getMatch(req.params.id);
+            res.status(200).json({body: `${data}`});
             
         } catch(err) {
             res.status(500).json(err);

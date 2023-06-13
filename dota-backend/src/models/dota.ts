@@ -24,6 +24,9 @@ export default class Dota {
     }
 
     async steam_connect() {
+      try{
+
+      
         this.steamClient = new Steam.SteamClient();
         this.steamUser = new Steam.SteamUser(this.steamClient);
         this.steamRichPresence = new Steam.SteamRichPresence(this.steamClient, 570);
@@ -42,21 +45,30 @@ export default class Dota {
             
         })
         return this.steamClient
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     async launch_dota() {
+      try{
         this.dotaClient = new Dota2.Dota2Client(this.steamClient, true, true);
         this.dotaClient.launch();
+      } catch (err){
+        console.log(err);
+      }
     }
     
-    async searchLiveGameByAccountId(accountId: string) {
+    async searchLiveGameByAccountId() {
+      try{
+
+      
         return new Promise((resolve, reject) => {
           const filterOptions = {
-            start_game: 0,
+            start_game: 90,
           };
       
           const handleSourceTVGamesResponse = (sourceTVGamesResponse: any) => {
-            console.log(sourceTVGamesResponse);
             resolve(sourceTVGamesResponse);
           };
       
@@ -70,15 +82,31 @@ export default class Dota {
             }
             
           });
-        });
+        });}
+        catch (err) {
+          console.log(err);
+        }
       }
 
       async getMatch(accountId: string) {
-        //search for player
-        const criteria = {
-          account_id: accountId
+
+        this.steamRichPresence.request(accountId);
+        this.steamRichPresence.once('info', async (data: any) => {
+          const stringData = data.rich_presence[0].rich_presence_kv;
+          console.log(stringData)
+          if(stringData){
+          const buffer = Buffer.from(stringData);
+          const decodedString = buffer.toString("utf8");
+          const match = decodedString.match(/WatchableGameID\x00([^#]+)/);
+          const gameId = match ? match[1] : null;
+          console.log(decodedString)
+          console.log({stringData, decodedString})
+          console.log(gameId);
         }
-        
+          
+        })
+
+        return 0;
       }
 
 
