@@ -89,25 +89,41 @@ export default class Dota {
       }
 
       async getMatch(accountId: string) {
-
-        this.steamRichPresence.request(accountId);
-        this.steamRichPresence.once('info', async (data: any) => {
-          const stringData = data.rich_presence[0].rich_presence_kv;
-          console.log(stringData)
-          if(stringData){
-          const buffer = Buffer.from(stringData);
-          const decodedString = buffer.toString("utf8");
-          const match = decodedString.match(/WatchableGameID\x00([^#]+)/);
-          const gameId = match ? match[1] : null;
-          console.log(decodedString)
-          console.log({stringData, decodedString})
-          console.log(gameId);
+        try {
+          if (!this.dotaClient || !this.steamClient) {
+            await this.steam_connect();
+          }
+          this.steamRichPresence.request(accountId);
+          const data = await new Promise((resolve) => {
+            this.steamRichPresence.once('info', (info: any) => {
+              const stringData = info.rich_presence[0].rich_presence_kv;
+              console.log(stringData);
+              if (stringData) {
+                const buffer = Buffer.from(stringData, 'base64');
+                const decodedString = buffer.toString('utf8');
+                const match = decodedString.match(/WatchableGameID\x00([^#]+)(.*)/);
+                const gameId = match ? match[1] : null;
+                const match2 = gameId?.match(/^\d+/);
+                const extractedNumbers = match2 ? match2[0] : null;
+      
+                const lobbies: (string | null)[] = [];
+                lobbies.push(extractedNumbers);
+      
+                const handler = (sourceTVGamesResponse: any) => {
+                  resolve(sourceTVGamesResponse);
+                };
+      
+                this.dotaClient.on('sourceTVGamesData', handler);
+                this.dotaClient.requestSourceTVGames({ lobby_ids: lobbies, start_game: 0 });
+              }
+            });
+          });
+      
+          return data;
+        } catch (err) {
+          console.log(err);
+          throw err;
         }
-          
-        })
-
-        return 0;
       }
-
 
 }

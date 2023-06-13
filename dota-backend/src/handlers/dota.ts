@@ -19,7 +19,7 @@ export class DotaHandler {
     async search(req: Request, res: Response) {
         try{
             const data: any = await dota.getMatch(req.params.id);
-            res.status(200).json({body: `${data}`});
+            res.status(200).json({body: `${JSON.stringify(data)}`});
             
         } catch(err) {
             res.status(500).json(err);
