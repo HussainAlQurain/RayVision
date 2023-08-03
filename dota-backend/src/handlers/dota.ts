@@ -4,11 +4,6 @@ import Dota from "../models/dota";
 const dota = new Dota();
 
 export class DotaHandler {
-    constructor() {
-        // Bind the search method to the class instance
-        this.search = this.search.bind(this);
-    }
-
     async getPlayerLiveMatches(accountId: string) {
         try {
             const matchData: any = await dota.getMatch(accountId);
@@ -32,6 +27,15 @@ export class DotaHandler {
     async search(req: Request, res: Response) {
         try {
             const accountId = req.params.id;
+            const matchData: any = await dota.getMatch(accountId);
+
+            // Check if matchData is not available or doesn't contain game data
+            if (!matchData.body || !matchData.body.game_list || matchData.body.game_list.length === 0) {
+                res.status(404).json({ message: "Player is not in a game" });
+                return;
+            }
+
+            // Process the live match data and get player matches
             const playerLiveMatches = await this.getPlayerLiveMatches(accountId);
             res.status(200).json({ players: playerLiveMatches });
         } catch (err) {
