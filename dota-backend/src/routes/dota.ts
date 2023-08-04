@@ -5,6 +5,6 @@ const DotaRouter = Router();
 
 const dotaHandler = new DotaHandler();
 
-DotaRouter.get('/player/:id', dotaHandler.search);
+DotaRouter.get('/player/:id', dotaHandler.getPlayerLiveMatches);
 
 export default DotaRouter;
