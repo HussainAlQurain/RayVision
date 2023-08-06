@@ -260,4 +260,43 @@ export default class Dota {
             throw err;
         }
     }
+
+    async getPlayerInfo(accountId: string): Promise<any> {
+        try {
+          const response = await axios.get(`https://api.opendota.com/api/players/${accountId}`);
+          const playerData = response.data;
+    
+          const {
+            profile: { personaname, name, avatarfull, leaderboard_rank },
+            mmr_estimate: { estimate },
+          } = playerData;
+    
+          const playerInfo: any = {};
+    
+          if (personaname) {
+            playerInfo.personaname = personaname;
+          }
+    
+          if (name) {
+            playerInfo.name = name;
+          }
+    
+          if (avatarfull) {
+            playerInfo.avatarfull = avatarfull;
+          }
+    
+          if (leaderboard_rank) {
+            playerInfo.leaderboard_rank = leaderboard_rank;
+          }
+    
+          if (estimate) {
+            playerInfo.mmr_estimate = estimate;
+          }
+    
+          return playerInfo;
+        } catch (error) {
+          console.error("Error fetching player info:", error);
+          throw error;
+        }
+      }
 }

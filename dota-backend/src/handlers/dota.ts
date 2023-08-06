@@ -18,23 +18,6 @@ export class DotaHandler {
                 const playerMatchPromises = accountIds.map((id: any) => dota.processPlayerMatches(id));
                 const playerMatches = await Promise.all(playerMatchPromises);
 
-                // Fetch additional data for each account_id
-                const playerInfoPromises = accountIds.map((id: any) =>
-                    axios.get(`https://api.opendota.com/api/players/${id}`)
-                );
-                const playerInfoResponses = await Promise.all(playerInfoPromises);
-                const playerInfoData = playerInfoResponses.map((response: any) => response.data);
-
-                // Add additional data to each player object
-                // Add optional chaining to safely access nested properties
-                for (let i = 0; i < playerMatches.length; i++) {
-                    playerMatches[i].leaderboard_rank = playerInfoData[i]?.leaderboard_rank;
-                    playerMatches[i].personaname = playerInfoData[i]?.profile?.personaname;
-                    playerMatches[i].profileurl = playerInfoData[i]?.profile?.profileurl;
-                    playerMatches[i].mmr_estimate = playerInfoData[i]?.mmr_estimate?.estimate;
-                    playerMatches[i].avatarfull = playerInfoData[i]?.profile?.avatarfull;
-                }
-
                 res.status(200).json(playerMatches);
             } else {
                 res.status(404).json({ message: "Player is not in a game or no data found" });
