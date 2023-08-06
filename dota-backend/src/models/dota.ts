@@ -15,6 +15,7 @@ export default class Dota {
     private dotaClient: any;
     private steamFriends: any;
     private steamRichPresence: any;
+    private heroData: any[] = [];
 
     constructor() {
     }
@@ -299,4 +300,24 @@ export default class Dota {
           throw error;
         }
       }
+
+      async getHeroes(): Promise<any[]> {
+        if (this.heroData.length === 0) {
+          try {
+            const response = await axios.get("https://api.opendota.com/api/heroes");
+            this.heroData = response.data;
+          } catch (error) {
+            console.error("Error fetching hero data:", error);
+            throw error;
+          }
+        }
+        return this.heroData;
+      }
+
+      async getHeroById(heroId: number): Promise<any | null> {
+        const heroes = await this.getHeroes();
+        const hero = heroes.find((hero) => hero.id === heroId);
+        return hero || null;
+      }
+      
 }
