@@ -23,12 +23,13 @@ export default class Dota {
         try {
             const MAX_RETRIES = 3; // Maximum number of retry attempts
             let retries = 0;
-
+    
             while (retries < MAX_RETRIES) {
                 try {
                     console.log(`Connecting to Steam... Attempt ${retries + 1}`);
                     await this.steam_connect();
                     console.log('Connected to Steam successfully!');
+                    await this.launch_dota(); // Await the launch_dota function
                     return;
                 } catch (err: any) {
                     console.log(`Error connecting to Steam: ${err.message}`);
@@ -36,12 +37,13 @@ export default class Dota {
                     await this.wait(30000); // Wait for 30 seconds before retrying
                 }
             }
-
+    
             console.log('Failed to connect to Steam after multiple attempts.');
         } catch (err: any) {
             console.log('Unexpected error occurred while connecting to Steam:', err);
         }
     }
+    
 
     private wait(ms: number) {
         return new Promise<void>((resolve) => {
@@ -75,12 +77,24 @@ export default class Dota {
 
     async launch_dota() {
         try {
+          return new Promise<void>((resolve, reject) => {
             this.dotaClient = new Dota2.Dota2Client(this.steamClient, true, true);
+            this.dotaClient.on('ready', () => {
+              console.log('Dota 2 Game Coordinator is ready!');
+              resolve(); // Resolve the Promise when the 'ready' event is emitted
+            });
+            this.dotaClient.on('unready', () => {
+              console.log('Dota 2 Game Coordinator is no longer ready!');
+              reject(new Error('Dota 2 Game Coordinator is no longer ready!'));
+            });
             this.dotaClient.launch();
+          });
         } catch (err) {
-            console.log(err);
+          console.log(err);
+          throw err;
         }
-    }
+      }
+      
 
     async searchLiveGameByAccountId() {
         try {
@@ -181,7 +195,7 @@ export default class Dota {
             const highestWinRateHero = Object.keys(heroesCount)
                 .sort((a, b) => {
                     const winRateA = (heroesCount[a] / totalMatches) * 100;
-                    const winRateB = (heroesCount[b] / totalMatches) * 100;
+                    const winRateB: any = (heroesCount[b] / totalMatches) * 100;
                     return winRateB - winRateA;
                 })
                 .slice(0, 1) // Get the highest win rate hero
@@ -217,6 +231,30 @@ export default class Dota {
             }
 
             return [];
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async getLastFiveMatches(accountId: number) {
+        try {
+            if (!this.dotaClient || !this.steamClient) {
+                await this.connectWithRetry();
+            }
+    
+            return new Promise((resolve, reject) => {
+                const callback = (err: any, CMsgDOTAProfileResponse: any) => {
+                    if (err) {
+                        console.error('Error fetching profile:', err);
+                        reject(err);
+                    } else {
+                        resolve(CMsgDOTAProfileResponse);
+                    }
+                };
+    
+                this.dotaClient.requestProfile(accountId, callback);
+            });
         } catch (err) {
             console.error(err);
             throw err;
