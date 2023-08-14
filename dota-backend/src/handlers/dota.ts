@@ -16,7 +16,7 @@ export class DotaHandler {
                 const accountIds = players.map((player: any) => player.account_id).filter((id: any) => id !== null); 
 
                 const playerMatchPromises = accountIds.map((id: any) => dota.processPlayerMatches(id));
-                const playerMatches = await Promise.all(playerMatchPromises);
+                const playerMatches = await Promise.allSettled(playerMatchPromises);
 
                 res.status(200).json(playerMatches);
             } else {

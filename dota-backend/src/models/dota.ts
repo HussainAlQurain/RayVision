@@ -125,6 +125,9 @@ export default class Dota {
 
     async getMatch(accountId: string) {
         try {
+
+            //before continuing i should try to check if the accountid is steamid32 and try to convert it to steamid64 using library such as big
+            //check if the steamid is a valid steamid64 then proceed.
             if (!this.dotaClient || !this.steamClient) {
                 await this.steam_connect();
             }
