@@ -13,7 +13,12 @@ export class LiveGameComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    const playerId = '188238296';
+    const playerId = '97658618';
+    
+    this.dotaService.getPlayerLiveGame(playerId).subscribe(data => {
+      this.data = data;
+    })
+
   }
 
 }

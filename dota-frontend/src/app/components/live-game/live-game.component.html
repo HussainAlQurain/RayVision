@@ -1,1 +1,36 @@
-<p>live-game works!</p>
+<nb-card>
+    <nb-card-header>
+      Players Data
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Account ID</th>
+            <th>Win Rate (%)</th>
+            <th>Top 3 Most Picked Heroes</th>
+            <th>Highest Win Rate Hero</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let playerData of data">
+            <td>{{ playerData.value.account_id }}</td>
+            <td>{{ playerData.value.win_rate | number: '1.2-2' }}</td>
+            <td>
+              <ul>
+                <!-- Using slice to get top 3 heroes and then displaying them -->
+                <li *ngFor="let hero of playerData.value.most_picked_heroes | slice:0:3">
+                  Hero ID: {{ hero.hero_id }} ({{ hero.count }} picks)
+                </li>
+              </ul>
+            </td>
+            <td>
+              Hero ID: {{ playerData.value.highest_win_rate_hero.hero_id }} 
+              ({{ playerData.value.highest_win_rate_hero.win_rate | number: '1.2-2' }}%)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+  </nb-card>
+  

@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbCardModule, NbTableModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +33,9 @@ import { LiveGameComponent } from './components/live-game/live-game.component';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    NbCardModule,
+    NbTableModule
 
   ],
   providers: [
