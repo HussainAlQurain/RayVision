@@ -12,11 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule} from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
+import { LiveGameComponent } from './components/live-game/live-game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    LiveGameComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +33,7 @@ import { MatIconModule} from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    HttpClientModule
 
   ],
   providers: [
