@@ -16,9 +16,22 @@ export default class Dota {
     private steamFriends: any;
     private steamRichPresence: any;
     private heroData: any[] = [];
+    private steamIdConverter = BigInt("76561197960265728");
 
     constructor() {
     }
+
+    isValidSteamID64(id: string) {
+        // Ensure it's a string and a numeric one.
+        if (typeof id !== 'string' || !/^\d+$/.test(id)) {
+          return false;
+        }
+      
+        // Ensure it's 17 digits and starts with 7656.
+        // This is a basic check, and it's possible that not all IDs in this range are valid, 
+        // but it can be a good start.
+        return id.length === 17 && id.startsWith('7656');
+      }
 
     private async connectWithRetry() {
         try {
@@ -128,11 +141,26 @@ export default class Dota {
 
             //before continuing i should try to check if the accountid is steamid32 and try to convert it to steamid64 using library such as big
             //check if the steamid is a valid steamid64 then proceed.
+            const currentId = BigInt(accountId);
+            let newId;
+            if(Number(accountId) < 7656119796026){
+                newId = currentId + this.steamIdConverter;
+                newId = newId.toString();
+            }
+            else {
+                newId = currentId;
+                newId = newId.toString();
+            }
+
+            if(!this.isValidSteamID64(newId.toString())){
+                return "Invalid steam id"
+            }
+
             if (!this.dotaClient || !this.steamClient) {
                 await this.steam_connect();
             }
 
-            this.steamRichPresence.request(accountId);
+            this.steamRichPresence.request(newId);
             const data = await new Promise((resolve) => {
                 this.steamRichPresence.once('info', (info: any) => {
                     if (info.rich_presence[0]) {
@@ -159,7 +187,7 @@ export default class Dota {
                     }
                 });
             });
-            console.log(data)
+            // console.log(data)
             return data;
         } catch (err) {
             console.log(err);
