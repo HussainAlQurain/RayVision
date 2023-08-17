@@ -20,7 +20,7 @@
               <ul>
                 <!-- Using slice to get top 3 heroes and then displaying them -->
                 <li *ngFor="let hero of playerData.value.most_picked_heroes | slice:0:3">
-                  Hero ID: {{ hero.hero_id }} ({{ hero.count }} picks)
+                  Hero ID: {{ hero }} ({{ hero }} picks)
                 </li>
               </ul>
             </td>
