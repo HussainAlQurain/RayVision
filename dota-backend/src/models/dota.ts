@@ -151,6 +151,7 @@ export default class Dota {
                 newId = currentId;
                 newId = newId.toString();
             }
+            console.log(newId);
 
             if(!this.isValidSteamID64(newId.toString())){
                 return "Invalid steam id"
